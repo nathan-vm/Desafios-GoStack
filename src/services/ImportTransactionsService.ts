@@ -66,8 +66,24 @@ class ImportTransactionsService {
 
     await categoriesRepository.save(newCategories)
 
-    console.log(newCategories)
-    console.log(transactions)
+    const finalCategories = [...newCategories, ...existentCategories]
+
+    const createdTransactions = transactionsRepository.create(
+      transactions.map(transaction => ({
+        title: transaction.title,
+        type: transaction.type,
+        value: transaction.value,
+        category: finalCategories.find(
+          category => category.title === transaction.category,
+        ),
+      })),
+    )
+
+    await transactionsRepository.save(createdTransactions)
+
+    await fs.promises.unlink(filePath)
+
+    return createdTransactions
   }
 }
 
