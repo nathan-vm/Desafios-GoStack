@@ -1,45 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
-import income from '../../assets/income.svg';
-import outcome from '../../assets/outcome.svg';
-import total from '../../assets/total.svg';
+import income from '../../assets/income.svg'
+import outcome from '../../assets/outcome.svg'
+import total from '../../assets/total.svg'
 
-import api from '../../services/api';
+import api from '../../services/api'
 
-import Header from '../../components/Header';
+import Header from '../../components/Header'
 
-import formatValue from '../../utils/formatValue';
+import formatValue from '../../utils/formatValue'
 
-import { Container, CardContainer, Card, TableContainer } from './styles';
+import { Container, CardContainer, Card, TableContainer } from './styles'
 
 interface Transaction {
-  id: string;
-  title: string;
-  value: number;
-  formattedValue: string;
-  formattedDate: string;
-  type: 'income' | 'outcome';
-  category: { title: string };
-  created_at: Date;
+  id: string
+  title: string
+  value: number
+  formattedValue: string
+  formattedDate: string
+  type: 'income' | 'outcome'
+  category: { title: string }
+  created_at: Date
 }
 
 interface Balance {
-  income: string;
-  outcome: string;
-  total: string;
+  income: string
+  outcome: string
+  total: string
 }
 
 const Dashboard: React.FC = () => {
-  // const [transactions, setTransactions] = useState<Transaction[]>([]);
-  // const [balance, setBalance] = useState<Balance>({} as Balance);
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [balance, setBalance] = useState<Balance>({} as Balance)
 
   useEffect(() => {
     async function loadTransactions(): Promise<void> {
-      // TODO
+      const response = await api.get('/transactions')
+
+      setTransactions(response.data.transactions)
+      setBalance(response.data.balance)
     }
 
-    loadTransactions();
-  }, []);
+    loadTransactions()
+  }, [])
 
   return (
     <>
@@ -98,7 +101,7 @@ const Dashboard: React.FC = () => {
         </TableContainer>
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard
