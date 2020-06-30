@@ -6,29 +6,41 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
-} from 'typeorm';
+} from 'typeorm'
 
-import Order from '@modules/orders/infra/typeorm/entities/Order';
-import Product from '@modules/products/infra/typeorm/entities/Product';
+import Order from '@modules/orders/infra/typeorm/entities/Order'
+import Product from '@modules/products/infra/typeorm/entities/Product'
 
+@Entity('orders_products')
 class OrdersProducts {
-  id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
-  order: Order;
+  @ManyToOne(() => Order, order => order.order_products)
+  @JoinColumn({ name: 'order_id' })
+  order: Order
 
-  product: Product;
+  @Column()
+  order_id: string
 
-  product_id: string;
+  @ManyToOne(() => Product, product => product.order_products)
+  @JoinColumn({ name: 'product_id' })
+  product: Product
 
-  order_id: string;
+  @Column()
+  product_id: string
 
-  price: number;
+  @Column()
+  price: number
 
-  quantity: number;
+  @Column()
+  quantity: number
 
-  created_at: Date;
+  @CreateDateColumn()
+  created_at: Date
 
-  updated_at: Date;
+  @UpdateDateColumn()
+  updated_at: Date
 }
 
-export default OrdersProducts;
+export default OrdersProducts
